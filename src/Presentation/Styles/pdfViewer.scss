@@ -1,0 +1,29 @@
+.pdf-container {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  overflow-y: auto;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.pdf-controls {
+  position: sticky;
+  top: 0;
+  background: var(--color-background);
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  z-index: 10;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.pdf-viewer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}

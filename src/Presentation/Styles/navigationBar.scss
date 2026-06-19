@@ -1,0 +1,152 @@
+.navigationBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 140px;
+  padding: 0 16px;
+
+  @media (orientation: portrait) {
+    height: 64px;
+    padding: 0 12px;
+  }
+}
+
+.menu {
+  @media (orientation: portrait) {
+    display: none;
+  }
+}
+
+.schoolName {
+  display: inline-block;
+  flex: none;
+  width: auto;
+  color: var(--color-text);
+  @media (orientation: portrait) {
+    display: none;
+  }
+}
+
+.rightSection {
+  display: flex;
+  align-items: center;
+
+  @media (orientation: portrait) {
+    flex-direction: row-reverse;
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--color-text);
+  @media (orientation: portrait) {
+    margin-left: auto;
+  }
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 8px;
+  border: 1px solid var(--color-accent);
+  position: relative;
+  @media (orientation: portrait) {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+.avatar.personal-page {
+  width: 100px;
+  height: 100px;
+  @media (orientation: portrait) {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+.avatar-container {
+  position: relative;
+}
+
+.avatar-container::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: 0px;
+  width: 28px;
+  height: 26px;
+  background: url("../../assets/icons/avatar-line-top.svg") no-repeat
+    center/contain;
+  pointer-events: none;
+
+  @media (orientation: portrait) {
+    width: 14px;
+    height: 13px;
+    top: -3px;
+  }
+}
+
+.avatar-container::after {
+  content: "";
+  position: absolute;
+  bottom: 0px;
+  left: -5px;
+  width: 20px;
+  height: 16px;
+  background: url("../../assets/icons/avatar-line-bottom.svg") no-repeat
+    center/contain;
+  pointer-events: none;
+  @media (orientation: portrait) {
+    width: 10px;
+    height: 8px;
+    left: -1px;
+  }
+}
+
+.burger-button {
+  display: none;
+
+  @media (orientation: portrait) {
+    display: block;
+    position: relative;
+  }
+}
+
+.user-name-wrapper {
+  @media (orientation: portrait) {
+    display: none;
+  }
+}
+
+.mobile-menu {
+  margin-top: 8px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1);
+  padding: 12px;
+  min-width: 180px;
+  z-index: 2000;
+
+  .menuItem {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    cursor: pointer;
+    color: var(--color-text);
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+      border-radius: 8px;
+    }
+  }
+}

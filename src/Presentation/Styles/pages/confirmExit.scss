@@ -1,0 +1,51 @@
+.exit-confirmation-page {
+  padding: 80px 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 100px;
+
+  @media (orientation: portrait) {
+    padding: 40px 10px;
+    gap: 40px;
+  }
+}
+
+.exit-confirmation-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  padding: 120px 0px;
+
+  @media (orientation: portrait) {
+    padding: 4px 0px;
+  }
+}
+
+.buttons-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 30px;
+
+  @media (orientation: portrait) {
+    gap: 20px;
+  }
+}
+
+.to-main-button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.confirm-exit-button {
+  padding: 28px 125px;
+
+  @media (orientation: portrait) {
+    padding: 18px 0px;
+    width: 100%;
+  }
+}

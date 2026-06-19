@@ -1,0 +1,71 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+:root {
+  --color-background: #fafafa;
+  --color-background-2: #555555;
+  --color-accent: #fdcb04;
+  --color-accent-2: #050099;
+  --color-text: #000000;
+  --color-text-2: #555555;
+  --color-good: #048b02;
+  --color-alert: #ff3427;
+  --color-inactive: #cccccc;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: var(--color-background);
+}
+
+html,
+body {
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+
+  font-family: "Inter";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: "Inter";
+}
+
+@media (orientation: landscape) {
+  .group-course-grid {
+    display: grid;
+    grid-template-columns: 1fr 5fr 1fr;
+    gap: 0;
+  }
+}
+
+@media (orientation: portrait) {
+  .group-course-grid {
+    display: grid;
+    grid-template-columns: 0fr 1fr 0fr;
+    gap: 0;
+  }
+}
+
+
+@media (orientation: landscape) {
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 0;
+  }
+}
+
+@media (orientation: portrait) {
+  .main-grid {
+    display: grid;
+    grid-template-columns: 0fr 1fr 0fr;
+    gap: 0;
+  }
+}

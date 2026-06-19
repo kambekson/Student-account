@@ -1,0 +1,40 @@
+.dot-day {
+  position: relative;
+}
+
+.dot-day::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.dot-day-past::before {
+  background-color: var(--color-good);
+}
+
+.dot-day-future::before {
+  background-color: var(--color-accent);
+}
+
+.schedule-calendar-wrapper {
+  padding: 50px 20%;
+  @media (orientation: portrait) {
+    padding: 15px 6px;
+  }
+}
+
+.rdp-root {
+  --rdp-accent-color: var(--color-accent);
+}
+
+.schedules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

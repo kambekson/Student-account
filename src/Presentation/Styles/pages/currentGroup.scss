@@ -1,0 +1,47 @@
+.group-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.student-list {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20;
+}
+
+.student-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 30px;
+  background-color: var(--color-background);
+  transition: background-color 0.3s;
+
+  &:nth-child(odd) {
+    background-color: var(--color-background);
+  }
+
+  &:nth-child(even) {
+    background-color: #ffffff;
+  }
+}
+
+.group-info-container {
+  @media (orientation: portrait) {
+    margin-top: 15px;
+  }
+}
+
+.group-students-container {
+  @media (orientation: portrait) {
+    margin-bottom: 15px;
+  }
+}
+
+.group-banner-image {
+  @media (orientation: portrait) {
+    width: 200px;
+  }
+}

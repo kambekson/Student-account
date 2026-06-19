@@ -1,0 +1,18 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  position: relative;
+  border-radius: 20px;
+  background-color: #ffffff;
+  border: 1px solid var(#ffffff);
+  word-wrap: break-word
+}
+
+.card.accent-border {
+  border: 1px solid var(--color-accent);
+}
+
+.card.accent-2-border {
+  border: 1px solid var(--color-accent-2);
+}

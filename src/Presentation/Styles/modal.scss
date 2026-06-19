@@ -1,0 +1,113 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(85, 85, 85, 1);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.transparent {
+  background-color: rgba(85, 85, 85, 0.6);
+}
+
+.modal-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-overlay.show .modal-content {
+  transform: translateY(0);
+}
+
+.modal-content {
+  background: var(--color-background);
+  padding: 30px 33px;
+  border-radius: 20px;
+  width: 36vw;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transform: translateY(-20px);
+  transition: transform 0.3s ease;
+  max-height: 80vh;
+  overflow-y: auto;
+
+  @media (orientation: portrait) {
+    width: 80vw;
+    padding: 16px 20px;
+    border-radius: 16px;
+    max-height: 90vh;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  margin-bottom: 50px;
+  @media (orientation: portrait) {
+    margin-bottom: 35px;
+  }
+}
+
+.modal-viewer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(85, 85, 85, 0.6);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-viewer-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-viewer-overlay.show .modal-content {
+  transform: translateY(0);
+}
+
+.modal-viewer-content {
+  background: var(--color-background);
+  padding: 30px 33px;
+  border-radius: 20px;
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transform: translateY(-20px);
+  transition: transform 0.3s ease;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.file-dropzone-text {
+  @media (orientation: portrait) {
+    display: none;
+  }
+}

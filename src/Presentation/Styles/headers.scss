@@ -1,0 +1,59 @@
+h1 {
+  margin: 0;
+  font-weight: 500;
+  font-size: 30px;
+
+  @media (orientation: portrait) {
+    font-size: 24px;
+  }
+}
+
+h2 {
+  margin: 0;
+  font-weight: 500;
+  font-size: 24px;
+
+  @media (orientation: portrait) {
+    font-size: 20px;
+  }
+}
+
+.regular {
+  margin: 0;
+  font-weight: 400;
+  font-size: 24px;
+
+  @media (orientation: portrait) {
+    font-size: 20px;
+  }
+}
+
+h3,
+label,
+.error-message {
+  margin: 0;
+  font-weight: 500;
+  font-size: 16px;
+  @media (orientation: portrait) {
+    font-size: 14px;
+  }
+}
+
+span {
+  margin: 0;
+  font-weight: 400;
+  font-size: 16px;
+  @media (orientation: portrait) {
+    font-size: 14px;
+  }
+}
+
+.error-message {
+  color: var(--color-alert);
+  display: flex;
+  align-content: start;
+}
+
+.bold {
+  font-weight: bold;
+}
