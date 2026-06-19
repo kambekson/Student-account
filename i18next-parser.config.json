@@ -1,8 +1,13 @@
 {
-  "locales": ["kk", "ru"],
+  "locales": [
+    "kk",
+    "ru"
+  ],
   "defaultNamespace": "translation",
   "output": "public/locales/$LOCALE/$NAMESPACE.json",
-  "input": ["src/**/*.{ts,tsx}"],
+  "input": [
+    "src/**/*.{ts,tsx}"
+  ],
   "sort": true,
   "useKeysAsDefaultValue": true
 }
