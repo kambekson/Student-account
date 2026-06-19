@@ -1,26 +1,12 @@
 import React, { useState } from "react";
-import {
-  Badge,
-  IconButton,
-  CircularProgress,
-  TextField,
-  Tooltip,
-} from "@mui/material";
-
-import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import SaveIcon from "@mui/icons-material/Check";
-import CloseIcon from "@mui/icons-material/Close";
+import { Plus, Pencil, Check, X } from "lucide-react";
 
 import Card from "@/shared/ui/Card";
 import avatarPlaceholder from "@/shared/assets/images/avatar-placeholder.png";
 import { CoinBalance } from "./CoinBalance";
 import { User, UserStudent, UserUpdate } from "@/entities/User";
-import {
-  inputLabelStyle,
-  outlinedInputStyle,
-} from "@/shared/ui/utils/muiInputs";
 import { useTranslation } from "react-i18next";
+import { Input } from "@/components/ui/input";
 
 interface UserInfoProps {
   user: User | null;
@@ -72,135 +58,88 @@ export const UserInfo: React.FC<UserInfoProps> = ({
   return (
     <>
       {isUpdatingAvatar && (
-        <div className="loading-overlay">
-          <CircularProgress color="primary" size={60} />
+        <div className="loading-overlay fixed inset-0 bg-black/50 flex items-center justify-center z-[9999]">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--color-accent-2)]"></div>
         </div>
       )}
       <Card
         className="accent-2-border"
         style={{ gap: "30px", position: "relative" }}
       >
-        <center>
-          <Badge
-            overlap="circular"
-            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-            sx={{ cursor: "pointer" }}
-            badgeContent={
-              <label htmlFor="avatar-upload">
-                <input
-                  type="file"
-                  id="avatar-upload"
-                  accept="image/*"
-                  style={{ display: "none" }}
-                  onChange={handleAvatarUpload}
-                />
-                <IconButton
-                  component="span"
-                  sx={{
-                    bgcolor: "var(--color-accent)",
-                    color: "white",
-                    width: "28px",
-                    height: "28px",
-                    "&:hover": { bgcolor: "var(--color-accent-dark)" },
-                  }}
-                >
-                  <AddIcon sx={{ fontSize: "18px", color: "black" }} />
-                </IconButton>
-              </label>
-            }
-          >
+        <div className="flex justify-center">
+          <div className="relative inline-block cursor-pointer">
             <img
               src={user?.avatar ? user.avatar.url : avatarPlaceholder}
               alt={t("аватар")}
-              className="avatar personal-page"
+              className="avatar personal-page w-24 h-24 rounded-full object-cover border-2 border-gray-200"
             />
-          </Badge>
-        </center>
+            <label htmlFor="avatar-upload" className="absolute bottom-0 right-0">
+              <input
+                type="file"
+                id="avatar-upload"
+                accept="image/*"
+                className="hidden"
+                onChange={handleAvatarUpload}
+              />
+              <span className="w-7 h-7 bg-[var(--color-accent)] hover:bg-amber-400 text-white rounded-full flex items-center justify-center cursor-pointer shadow-md transition-colors">
+                <Plus className="w-4 h-4 text-black" />
+              </span>
+            </label>
+          </div>
+        </div>
 
         {isEditing ? (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "10px",
-              alignItems: "center",
-            }}
-          >
-            <TextField
-              size="small"
-              label={t("Имя")}
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              sx={outlinedInputStyle()}
-              slotProps={{
-                input: { sx: outlinedInputStyle() },
-                inputLabel: { sx: inputLabelStyle() },
-              }}
-            />
-
-            <TextField
-              size="small"
-              label={t("Фамилия")}
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              sx={outlinedInputStyle()}
-              slotProps={{
-                input: { sx: outlinedInputStyle() },
-                inputLabel: { sx: inputLabelStyle() },
-              }}
-            />
+          <div className="flex flex-col gap-2.5 items-center w-full max-w-xs mx-auto">
+            <div className="w-full flex flex-col gap-2">
+              <Input
+                type="text"
+                placeholder={t("Имя")}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="h-10"
+              />
+              <Input
+                type="text"
+                placeholder={t("Фамилия")}
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="h-10"
+              />
+            </div>
             {error && (
-              <span style={{ color: "var(--color-alert)", fontSize: "14px" }}>
+              <span className="text-sm text-[var(--color-alert)]">
                 {error}
               </span>
             )}
-            <div style={{ display: "flex", gap: "10px" }}>
-              <Tooltip title={t("Сохранить")}>
-                <IconButton
-                  onClick={handleSave}
-                  sx={{ color: "var(--color-good)" }}
-                >
-                  <SaveIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title={t("Отмена")}>
-                <IconButton
-                  onClick={handleCancel}
-                  sx={{ color: "var(--color-alert)" }}
-                >
-                  <CloseIcon />
-                </IconButton>
-              </Tooltip>
+            <div className="flex gap-2.5">
+              <button
+                onClick={handleSave}
+                title={t("Сохранить")}
+                className="p-2 text-[var(--color-good)] hover:bg-green-50 rounded-full transition-colors focus:outline-none"
+              >
+                <Check className="w-5 h-5" />
+              </button>
+              <button
+                onClick={handleCancel}
+                title={t("Отмена")}
+                className="p-2 text-[var(--color-alert)] hover:bg-red-50 rounded-full transition-colors focus:outline-none"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
           </div>
         ) : (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "8px",
-            }}
-          >
-            <h1 style={{ margin: 0, color: "var(--color-text)" }}>
+          <div className="flex items-center justify-center gap-2">
+            <h1 className="m-0 text-2xl font-bold text-[var(--color-text)]">
               {`${user?.firstName} ${user?.lastName}`}
             </h1>
-            <Tooltip title={t("Редактировать")}>
-              <IconButton
-                size="small"
-                onClick={() => setIsEditing(true)}
-                sx={{
-                  padding: 0,
-                  marginTop: "2px",
-                  color: "var(--color-text-2)",
-                  "&:hover": {
-                    color: "var(--color-accent)",
-                  },
-                }}
-              >
-                <EditIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
+            <button
+              onClick={() => setIsEditing(true)}
+              title={t("Редактировать")}
+              className="p-1 text-[var(--color-text-2)] hover:text-[var(--color-accent)] rounded-full transition-colors focus:outline-none mt-0.5"
+            >
+              <Pencil className="w-4.5 h-4.5" />
+            </button>
           </div>
         )}
 
@@ -209,11 +148,11 @@ export const UserInfo: React.FC<UserInfoProps> = ({
           onBalanceClick={handleOnBalanceClick}
           showShopButton={false}
         />
-        <center>
+        <div className="flex justify-center">
           <span className="text-button" onClick={handleLogout}>
             {t("Выйти из профиля")}
           </span>
-        </center>
+        </div>
       </Card>
     </>
   );

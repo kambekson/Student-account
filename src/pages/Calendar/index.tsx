@@ -1,10 +1,8 @@
 import { setCurrentPageId } from "@/app/model/appSlice";
 import ScheduleCalendar from "@/widgets/ScheduleCalendar";
 import { AppDispatch, RootState } from "@/app/store";
-import { CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "@emotion/styled";
 import { useStudentSchedule } from "./hooks";
 import { notifyError } from "@/shared/ui/Toasts/options";
 import { useQueryClient } from "@tanstack/react-query";
@@ -38,7 +36,7 @@ const CalendarPage: React.FC = () => {
   useEffect(() => {
     if (!error) return;
     notifyError(t("Ошибка при загрузке расписания"), error.message);
-  }, [error]);
+  }, [error, t]);
 
   const handleDateChange = (date: Date) => {
     setSelectedDate(date);
@@ -47,9 +45,9 @@ const CalendarPage: React.FC = () => {
   return (
     <>
       {isLoading && (
-        <Loader>
-          <CircularProgress color="primary" size={60} />
-        </Loader>
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999]">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--color-accent-2)]"></div>
+        </div>
       )}
       <div className="schedule-calendar-wrapper">
         <ScheduleCalendar
@@ -60,18 +58,5 @@ const CalendarPage: React.FC = () => {
     </>
   );
 };
-
-const Loader = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-`;
 
 export default CalendarPage;

@@ -1,21 +1,14 @@
-import {
-  Box,
-  Button,
-  CircularProgress,
-  IconButton,
-  TextField,
-  Tooltip,
-} from "@mui/material";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useEffect, useRef, useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { notifyError } from "@/shared/ui/Toasts/options";
 import { InformationSystemError, subcodeMap } from "@/entities/Common";
 import { UserAPI } from "@/entities/User";
-import { addSubDomainToUrl, getSubdomain } from "@/shared/lib/utils";
+import { addSubDomainToUrl } from "@/shared/lib/utils";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "@/shared/ui/Switcher/LanguageSwitcher";
 import { RECOVERY_REDIRECT_URL } from "@/shared/api/base";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d\W]{8,25}$/;
 
@@ -34,7 +27,7 @@ const useValidRegex = (
     }
 
     setTextError(re.test(value) ? "" : textError);
-  }, [value]);
+  }, [value, re, textError, setTextError]);
 };
 
 const useStringsMatch = (
@@ -52,7 +45,7 @@ const useStringsMatch = (
     }
 
     setTextError(value1 === value2 ? "" : textError);
-  }, [value1, value2]);
+  }, [value1, value2, textError, setTextError]);
 };
 
 export interface RecoveryProps {
@@ -119,77 +112,78 @@ export const RecoveryPage: React.FC<RecoveryProps> = (props) => {
   };
 
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      height={"100%"}
-      flexDirection="column"
-      gap="1rem"
-    >
-      <Tooltip
-        title={t(
+    <div className="flex flex-col items-center gap-4 w-[400px]">
+      <div className="text-xl font-bold text-[var(--color-text)]">{t("Восстановление пароля")}</div>
+      <p className="text-xs text-gray-500 text-center px-4">
+        {t(
           "Пароль должен содержать от 8 до 25 символов, иметь минимум одну цифру, одну заглавную и одну строчную латинские буквы"
         )}
-        placement="top"
-        arrow
-      >
-        <TextField
-          fullWidth
-          type={showPassword ? "text" : "password"}
-          label={`${t("Пароль")} *`}
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-          error={!!passwordTextError}
-          helperText={passwordTextError}
-          disabled={isDisabled}
-          slotProps={{
-            input: {
-              endAdornment: (
-                <IconButton onClick={() => setShowPassword(!showPassword)}>
-                  {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                </IconButton>
-              ),
-            },
-          }}
-        />
-      </Tooltip>
-      <TextField
-        fullWidth
-        type={showPassword ? "text" : "password"}
-        label={`${t("Повторите пароль")} *`}
-        value={repeatedPassword}
-        onChange={(e) => {
-          setRepeatedPassword(e.target.value);
-        }}
-        error={!!repeatedPasswordTextError}
-        helperText={repeatedPasswordTextError}
-        disabled={isDisabled}
-        slotProps={{
-          input: {
-            endAdornment: (
-              <IconButton onClick={() => setShowPassword(!showPassword)}>
-                {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-              </IconButton>
-            ),
-          },
-        }}
-      />
+      </p>
+
+      <div className="w-full flex flex-col gap-1.5 relative">
+        <label className="text-xs font-semibold text-gray-500">{t("Пароль")} *</label>
+        <div className="relative flex items-center">
+          <Input
+            type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+            disabled={isDisabled}
+            className={`h-11 pr-10 ${passwordTextError ? "border-[var(--color-alert)] focus-visible:ring-[var(--color-alert)]" : ""}`}
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 p-1 text-gray-500 hover:text-gray-900 transition-colors focus:outline-none"
+          >
+            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+          </button>
+        </div>
+        {passwordTextError && (
+          <span className="text-xs text-[var(--color-alert)] font-medium mt-0.5">{passwordTextError}</span>
+        )}
+      </div>
+
+      <div className="w-full flex flex-col gap-1.5 relative">
+        <label className="text-xs font-semibold text-gray-500">{t("Повторите пароль")} *</label>
+        <div className="relative flex items-center">
+          <Input
+            type={showPassword ? "text" : "password"}
+            value={repeatedPassword}
+            onChange={(e) => {
+              setRepeatedPassword(e.target.value);
+            }}
+            disabled={isDisabled}
+            className={`h-11 pr-10 ${repeatedPasswordTextError ? "border-[var(--color-alert)] focus-visible:ring-[var(--color-alert)]" : ""}`}
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 p-1 text-gray-500 hover:text-gray-900 transition-colors focus:outline-none"
+          >
+            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+          </button>
+        </div>
+        {repeatedPasswordTextError && (
+          <span className="text-xs text-[var(--color-alert)] font-medium mt-0.5">{repeatedPasswordTextError}</span>
+        )}
+      </div>
+
       {!isDisabled ? (
         <Button
-          fullWidth
-          variant="contained"
+          className="w-full h-11 bg-[var(--color-accent-2)] hover:bg-[var(--color-accent-2)]/90 text-white font-semibold rounded-xl shadow-md transition-all active:scale-[0.98]"
           onClick={handleButtonClick}
           disabled={isDisabled}
         >
           {t("Продолжить")}
         </Button>
       ) : (
-        <CircularProgress />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-accent-2)]"></div>
       )}
-      <LanguageSwitcher />
-    </Box>
+      <div className="mt-2">
+        <LanguageSwitcher />
+      </div>
+    </div>
   );
 };

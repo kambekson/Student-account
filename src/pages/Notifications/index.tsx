@@ -12,7 +12,6 @@ import { Notification } from "@/entities/Notification";
 import { NotificationsContent } from "./Content";
 import { setCurrentPageId } from "@/app/model/appSlice";
 import { useQueryClient } from "@tanstack/react-query";
-import { CircularProgress } from "@mui/material";
 
 const NotificationsPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -61,8 +60,8 @@ const NotificationsPage: React.FC = () => {
           <div>
             <Card>
               {isLoading ? (
-                <div className="loading-overlay">
-                  <CircularProgress color="primary" size={60} />
+                <div className="loading-overlay flex justify-center py-10">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--color-accent-2)]"></div>
                 </div>
               ) : (
                 <NotificationsContent

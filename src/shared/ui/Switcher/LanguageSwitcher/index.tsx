@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/app/store";
 import { setUser } from "@/entities/Auth";
 import { UserAPI } from "@/entities/User";
-import { CircularProgress } from "@mui/material";
 
 const LanguageSwitcher: React.FC = () => {
   const { i18n } = useTranslation();
@@ -37,7 +36,13 @@ const LanguageSwitcher: React.FC = () => {
     setIsUpdating(false);
   };
 
-  if (isUpdating) return <CircularProgress color="primary" size={40} />;
+  if (isUpdating) {
+    return (
+      <div className="flex justify-center items-center py-2">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-accent-2)]"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="lang-switcher">

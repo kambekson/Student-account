@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { CircularProgress } from "@mui/material";
-
 import { IoIosArrowForward } from "react-icons/io";
 
 import { AppDispatch, RootState } from "@/app/store";
@@ -178,8 +176,8 @@ const PersonalPage: React.FC = () => {
   return (
     <>
       {isUpdatingUser && (
-        <div className="loading-overlay">
-          <CircularProgress color="primary" size={60} />
+        <div className="loading-overlay fixed inset-0 bg-black/50 flex items-center justify-center z-[9999]">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--color-accent-2)]"></div>
         </div>
       )}
       <div className="page">
@@ -206,9 +204,9 @@ const PersonalPage: React.FC = () => {
               ) : (
                 <Card className="accent-border" style={{ gap: "30px" }}>
                   {groupsStatus === DataStatus.LOADING ? (
-                    <center>
-                      <CircularProgress color="primary" />
-                    </center>
+                    <div className="flex justify-center p-4">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-accent-2)]"></div>
+                    </div>
                   ) : (
                     groups?.map((group) => (
                       <div className="group-list" key={group.id}>
@@ -278,9 +276,9 @@ const PersonalPage: React.FC = () => {
                     </button>
                   </div>
                   {groupCoursesStatus === DataStatus.LOADING ? (
-                    <center>
-                      <CircularProgress color="primary" />
-                    </center>
+                    <div className="flex justify-center p-4">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-accent-2)]"></div>
+                    </div>
                   ) : (
                     <div className="courses-info">
                       {groupCourses?.map((groupCourse) => (

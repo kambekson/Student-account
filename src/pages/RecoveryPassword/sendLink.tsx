@@ -2,10 +2,11 @@ import { getSubdomain } from "@/shared/lib/utils";
 import { notifyError } from "@/shared/ui/Toasts/options";
 import { UserAPI } from "@/entities/User";
 import { InformationSystemError, subcodeMap } from "@/entities/Common";
-import { Box, Button, CircularProgress, TextField } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "@/shared/ui/Switcher/LanguageSwitcher";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const useNotEmpty = (
   value: string,
@@ -21,7 +22,7 @@ const useNotEmpty = (
     }
 
     setTextError(value ? "" : textError);
-  }, [value]);
+  }, [value, textError, setTextError]);
 };
 
 export const SendLinkPage: React.FC = () => {
@@ -94,61 +95,65 @@ export const SendLinkPage: React.FC = () => {
   };
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      gap="1rem"
-      width="400px"
-    >
-      <div>{t("Восстановление пароля")}</div>
-      <TextField
-        fullWidth
-        label={t("Электронная почта")}
-        value={email}
-        onChange={(e) => {
-          setEmail(e.target.value);
-        }}
-        error={!!textError}
-        helperText={textError}
-        disabled={isDisabled}
-      />
+    <div className="flex flex-col items-center gap-4 w-[400px]">
+      <div className="text-xl font-bold text-[var(--color-text)]">{t("Восстановление пароля")}</div>
+      <div className="w-full flex flex-col gap-1.5">
+        <label className="text-xs font-semibold text-gray-500">{t("Электронная почта")}</label>
+        <Input
+          type="email"
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
+          disabled={isDisabled}
+          className={`h-11 ${textError ? "border-[var(--color-alert)] focus-visible:ring-[var(--color-alert)]" : ""}`}
+        />
+        {textError && (
+          <span className="text-xs text-[var(--color-alert)] font-medium mt-0.5">{textError}</span>
+        )}
+      </div>
       {!sendOneTime ? (
         !isDisabled ? (
           <Button
-            fullWidth
-            variant="contained"
+            className="w-full h-11 bg-[var(--color-accent-2)] hover:bg-[var(--color-accent-2)]/90 text-white font-semibold rounded-xl shadow-md transition-all active:scale-[0.98]"
             onClick={handleButtonClick}
             disabled={isDisabled}
           >
             {t("Продолжить")}
           </Button>
         ) : (
-          <CircularProgress />
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-accent-2)]"></div>
         )
       ) : (
-        <Box display="flex" flexDirection="column" gap="1rem">
-          <span>
+        <div className="flex flex-col gap-4 w-full">
+          <span className="text-sm text-[var(--color-text-2)] text-center">
             {t(
               "Мы отправили письмо с ссылкой на восстановление пароля на Вашу почту"
             )}
             .
           </span>
-          <Box>
-            <span>{t("Еще не получили письмо")}?</span>
+          <div className="flex items-center justify-between border-t border-gray-100 pt-3">
+            <span className="text-xs text-gray-500">{t("Еще не получили письмо")}?</span>
             {!isSendCodeDisabled ? (
-              <Button disabled={isSendCodeDisabled} onClick={handleButtonClick}>
+              <Button
+                variant="ghost"
+                className="h-9 px-3 text-xs"
+                disabled={isSendCodeDisabled}
+                onClick={handleButtonClick}
+              >
                 {isSendTimerRunning && sendTimeLeft > 0
                   ? sendTimeLeft
                   : t("Отправить повторно")}
               </Button>
             ) : (
-              <CircularProgress />
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[var(--color-accent-2)]"></div>
             )}
-          </Box>
-        </Box>
+          </div>
+        </div>
       )}
-      <LanguageSwitcher />
-    </Box>
+      <div className="mt-2">
+        <LanguageSwitcher />
+      </div>
+    </div>
   );
 };

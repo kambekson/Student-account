@@ -9,7 +9,6 @@ import { addSubDomainToUrl, getSubdomain } from "@/shared/lib/utils";
 import { hasRole, User, UserRole } from "@/entities/User";
 import logoImage from "@/shared/assets/images/logo.png";
 import "./style.css";
-import { CircularProgress } from "@mui/material";
 import { MODE, REDIRECT_URL } from "@/shared/api/base";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
@@ -151,9 +150,9 @@ const LoginPage: React.FC = () => {
 
           <div className="login-actions-group">
             {isAuthloading ? (
-              <center>
-                <CircularProgress color="primary" />
-              </center>
+              <div className="flex justify-center py-2">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-accent-2)]"></div>
+              </div>
             ) : (
               <button onClick={handleLogin} className="login-submit-button">
                 <span>{t("Войти")}</span>

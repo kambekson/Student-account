@@ -3,15 +3,7 @@ import {
   Notification,
   NotificationType,
 } from "@/entities/Notification";
-import {
-  Card,
-  CardContent,
-  Typography,
-  IconButton,
-  Box,
-  Badge,
-} from "@mui/material";
-import { Delete, Notifications } from "@mui/icons-material";
+import { Trash2, Bell } from "lucide-react";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale/ru";
 import { useTranslation } from "react-i18next";
@@ -51,7 +43,6 @@ const getNotificationText = (
 export const NotificationDisplay: React.FC<NotificationDisplayProps> = ({
   notification,
   onEdit,
-  onClick,
   onDelete,
 }) => {
   const { t } = useTranslation();
@@ -67,71 +58,52 @@ export const NotificationDisplay: React.FC<NotificationDisplayProps> = ({
   };
 
   return (
-    <Card
-      variant="outlined"
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        cursor: !notification.isRead ? "pointer" : undefined,
-        backgroundColor: notification.isRead
-          ? "var(--color-background)"
-          : "rgba(253, 203, 4, 0.3)",
+    <div
+      onClick={!notification.isRead ? (e) => handleMarkAsRead(e) : undefined}
+      className={`flex items-center rounded-xl border p-4 mb-2 transition-all duration-200 ${
+        !notification.isRead
+          ? "cursor-pointer bg-[rgba(253,203,4,0.15)] hover:shadow-md border-amber-300"
+          : "bg-[var(--color-background)] border-gray-200"
+      }`}
+      style={{
         borderLeft: `4px solid ${
           notification.isRead ? "var(--color-inactive)" : "var(--color-alert)"
         }`,
-        mb: 1,
-        "&:hover": {
-          boxShadow: !notification.isRead ? 3 : 0,
-        },
-        color: "var(--color-text)",
-        transition: "background-color 0.2s, border-color 0.2s",
       }}
-      onClick={!notification.isRead ? (e) => handleMarkAsRead(e) : undefined}
     >
-      <CardContent
-        sx={{ display: "flex", alignItems: "center", flexGrow: 1, py: 1.5 }}
-      >
-        <Badge
-          color="error"
-          variant="dot"
-          invisible={notification.isRead}
-          sx={{
-            mr: 2,
-            "& .MuiBadge-dot": {
-              backgroundColor: "var(--color-alert)",
-            },
-          }}
-        >
-          <Notifications sx={{ color: "var(--color-accent)" }} />
-        </Badge>
-        <Box>
-          <Typography
-            variant="subtitle1"
-            fontWeight={notification.isRead ? "normal" : "bold"}
-            sx={{ color: "var(--color-text)" }}
+      <div className="flex items-center flex-grow">
+        <div className="relative mr-4 flex-shrink-0">
+          <Bell className="w-5 h-5 text-[var(--color-accent)]" />
+          {!notification.isRead && (
+            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[var(--color-alert)]"></span>
+          )}
+        </div>
+        <div>
+          <h4
+            className={`text-sm ${
+              notification.isRead ? "font-normal" : "font-semibold"
+            } text-[var(--color-text)]`}
           >
             {getNotificationText(notification, t)}
-          </Typography>
-          <Typography variant="body2" sx={{ color: "var(--color-text-2)" }}>
+          </h4>
+          <p className="text-xs text-[var(--color-text-2)] mt-1">
             {format(new Date(notification.createdAt), "d MMMM yyyy, HH:mm", {
               locale: ru,
             })}
-          </Typography>
-        </Box>
-      </CardContent>
-      {(onEdit || onDelete) && (
-        <Box sx={{ display: "flex", alignItems: "center", pr: 1 }}>
-          {onDelete && (
-            <IconButton
-              onClick={handleDelete}
-              title={t("Удалить уведомление")}
-              sx={{ color: "var(--color-alert)" }}
-            >
-              <Delete fontSize="small" />
-            </IconButton>
-          )}
-        </Box>
+          </p>
+        </div>
+      </div>
+      {onDelete && (
+        <div className="flex items-center pl-2">
+          <button
+            onClick={handleDelete}
+            title={t("Удалить уведомление")}
+            className="p-1.5 rounded-full hover:bg-black/5 text-[var(--color-alert)] transition-colors focus:outline-none"
+          >
+            <Trash2 className="w-4.5 h-4.5" />
+          </button>
+        </div>
       )}
-    </Card>
+    </div>
   );
 };

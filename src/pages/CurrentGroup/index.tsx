@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
-import { CircularProgress } from "@mui/material";
 
 import { format } from "date-fns";
 
@@ -167,9 +166,9 @@ const CurrentGroupPage: React.FC = () => {
                     </div>
                   </>
                 ) : (
-                  <center>
-                    <CircularProgress color="primary" />
-                  </center>
+                  <div className="flex justify-center p-4">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-accent-2)]"></div>
+                  </div>
                 )}
               </Card>
               {!isPortrait && (
@@ -212,9 +211,9 @@ const CurrentGroupPage: React.FC = () => {
                     ))}
                   </ul>
                 ) : (
-                  <center>
-                    <CircularProgress color="primary" />
-                  </center>
+                  <div className="flex justify-center p-4">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-accent-2)]"></div>
+                  </div>
                 )}
               </Card>
               {isPortrait && (

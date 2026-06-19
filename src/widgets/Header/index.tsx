@@ -1,19 +1,15 @@
-import React, { FC, useRef, useState } from "react";
+import React, { FC, useState } from "react";
+import { User, Bell, Menu } from "lucide-react";
 
 import "./style.css";
 
 import CalendarIcon from "@/shared/assets/icons/calendar.svg?react";
-
 import logo from "@/shared/assets/images/logo.png";
 import avatarPlaceholder from "@/shared/assets/images/avatar-placeholder.png";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "@/app/store";
 import { useSelector } from "react-redux";
 import { MenuItem } from "@/entities/Common";
-import { PersonOutline, NotificationsNone } from "@mui/icons-material";
-import { Badge, ClickAwayListener, Paper, Popper } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import IconButton from "@mui/material/IconButton";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "@/shared/ui/Switcher/LanguageSwitcher";
 
@@ -23,39 +19,29 @@ interface NavigationBarProps {
 
 const NavigationBar: FC<NavigationBarProps> = ({ selectedItemId }) => {
   const navigate = useNavigate();
-
   const [openMenu, setOpenMenu] = useState(false);
-  const anchorRef = useRef<HTMLButtonElement | null>(null);
-
   const user = useSelector((state: RootState) => state.auth.user);
-
   const { t } = useTranslation();
 
   const menuItems: MenuItem[] = [
     {
       id: "profile",
       label: t("Мой профиль"),
-      icon: (
-        <PersonOutline
-          sx={{ color: "var(--color-accent)", width: 24, height: 24 }}
-        />
-      ),
+      icon: <User className="text-[var(--color-accent)] w-6 h-6" />,
       path: "/me",
     },
     {
       id: "notifications",
       label: t("Уведомления"),
       icon: (
-        <Badge
-          badgeContent={user?.notificationCount || 0}
-          color="error"
-          invisible={!user?.notificationCount}
-          overlap="circular"
-        >
-          <NotificationsNone
-            sx={{ color: "var(--color-accent)", width: 24, height: 24 }}
-          />
-        </Badge>
+        <div className="relative">
+          <Bell className="text-[var(--color-accent)] w-6 h-6" />
+          {!!user?.notificationCount && (
+            <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+              {user.notificationCount}
+            </span>
+          )}
+        </div>
       ),
       path: "/notifications",
     },
@@ -74,7 +60,7 @@ const NavigationBar: FC<NavigationBarProps> = ({ selectedItemId }) => {
   return (
     <div className="main-grid" style={{ backgroundColor: "#FFFFFF" }}>
       <div></div>
-      <div className="navigationBar">
+      <div className="navigationBar relative">
         <div className="leftSection">
           <div className="logoContainer">
             <img src={logo} alt={t("Логотип")} className="logo" />
@@ -122,27 +108,26 @@ const NavigationBar: FC<NavigationBarProps> = ({ selectedItemId }) => {
             <span className="user-name-wrapper">{`${user?.firstName} ${user?.lastName}`}</span>
           </div>
         </div>
-        <div className="burger-button">
-          <IconButton
-            ref={anchorRef}
-            onClick={() => setOpenMenu((prev) => !prev)}
-          >
-            <MenuIcon sx={{ fontSize: 32 }} />
-          </IconButton>
 
-          <Popper
-            open={openMenu}
-            anchorEl={anchorRef.current}
-            placement="bottom-end"
-            modifiers={[{ name: "zIndex" }]}
-            sx={{ zIndex: 2000 }}
+        <div className="burger-button">
+          <button
+            onClick={() => setOpenMenu((prev) => !prev)}
+            className="p-2 rounded-full hover:bg-black/5 transition-colors focus:outline-none"
           >
-            <ClickAwayListener onClickAway={() => setOpenMenu(false)}>
-              <Paper className="mobile-menu" sx={{ zIndex: 2000 }}>
+            <Menu className="w-8 h-8 text-gray-700" />
+          </button>
+
+          {openMenu && (
+            <>
+              <div
+                className="fixed inset-0 z-[1999]"
+                onClick={() => setOpenMenu(false)}
+              />
+              <div className="mobile-menu absolute right-4 top-16 bg-white border border-gray-200 shadow-lg rounded-xl p-2 flex flex-col z-[2000] w-48">
                 {menuItems.map((item) => (
                   <div
                     key={item.id}
-                    className="menuItem"
+                    className="menuItem flex items-center gap-2.5 p-2.5 rounded-lg hover:bg-gray-100 cursor-pointer text-sm font-medium text-gray-700 transition-colors"
                     onClick={() => {
                       handleItemClick(item.path);
                       setOpenMenu(false);
@@ -152,12 +137,12 @@ const NavigationBar: FC<NavigationBarProps> = ({ selectedItemId }) => {
                     <span>{item.label}</span>
                   </div>
                 ))}
-                <center style={{ marginTop: "10px" }}>
+                <div className="border-t border-gray-100 my-2 pt-2 flex justify-center">
                   <LanguageSwitcher />
-                </center>
-              </Paper>
-            </ClickAwayListener>
-          </Popper>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
       <div></div>

@@ -1,17 +1,5 @@
 import { FC } from "react";
-
-import {
-  CircularProgress,
-  Collapse,
-  IconButton,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
-
-import CircleIcon from "@mui/icons-material/Circle";
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { ChevronUp, ChevronDown } from "lucide-react";
 
 import { ScheduledLesson } from "@/entities/ScheduledLesson";
 import {
@@ -46,33 +34,32 @@ export const LessonItem: FC<{
 
   return (
     <>
-      <ListItem style={{ padding: "10px 0px" }}>
-        <ListItemIcon style={{ minWidth: "15px", marginRight: "10px" }}>
-          <CircleIcon
-            style={{
-              width: "14px",
-              color: "var(--color-background-2)",
-              margin: 0,
-              padding: 0,
-            }}
-          />
-        </ListItemIcon>
-        <ListItemText
-          primary={lessonData.name}
-          secondary={
-            lessonData.description || `${t("Описание урока отсутствует")}`
-          }
-          style={{ margin: 0 }}
-        />
-        <IconButton onClick={() => onToggle(lessonId, lessonId)}>
-          {isOpen ? <ExpandLess /> : <ExpandMore />}
-        </IconButton>
-      </ListItem>
+      <div className="flex items-center justify-between py-2 px-1 border-b border-gray-100 last:border-b-0">
+        <div className="flex items-center flex-grow overflow-hidden mr-2">
+          <div className="w-2.5 h-2.5 rounded-full bg-[var(--color-background-2)] mr-3 flex-shrink-0"></div>
+          <div className="flex flex-col overflow-hidden">
+            <span className="text-sm font-semibold text-gray-900 truncate">{lessonData.name}</span>
+            <span className="text-xs text-gray-500 truncate">
+              {lessonData.description || `${t("Описание урока отсутствует")}`}
+            </span>
+          </div>
+        </div>
+        <button
+          onClick={() => onToggle(lessonId, lessonId)}
+          className="p-1.5 rounded-full hover:bg-black/5 transition-colors focus:outline-none"
+        >
+          {isOpen ? (
+            <ChevronUp className="w-5 h-5 text-gray-600" />
+          ) : (
+            <ChevronDown className="w-5 h-5 text-gray-600" />
+          )}
+        </button>
+      </div>
 
-      <Collapse in={isOpen} timeout="auto" unmountOnExit>
-        <div style={{ padding: "0 21px" }}>
+      {isOpen && (
+        <div className="pl-6 pr-2 py-2 transition-all duration-300">
           {scheduledAssignmentsMap[lessonId] ? (
-            <List>
+            <div className="flex flex-col gap-1">
               {scheduledAssignmentsMap[lessonId].map((item) => (
                 <AssignmentItem
                   key={item.id}
@@ -82,14 +69,14 @@ export const LessonItem: FC<{
                   pointType={pointType}
                 />
               ))}
-            </List>
+            </div>
           ) : (
-            <center>
-              <CircularProgress color="primary" />
-            </center>
+            <div className="flex justify-center p-4">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[var(--color-accent-2)]"></div>
+            </div>
           )}
         </div>
-      </Collapse>
+      )}
     </>
   );
 };

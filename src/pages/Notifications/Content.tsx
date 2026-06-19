@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { Box, CircularProgress, Typography } from "@mui/material";
 import { Notification } from "@/entities/Notification";
 import { UUID } from "@/entities/Common";
 import { NotificationsList } from "./List";
@@ -36,17 +35,17 @@ export const NotificationsContent: FC<NotificationsContentProps> = ({
       />
 
       {hasNextPage && (
-        <Box ref={loaderRef} display="flex" justifyContent="center" py={2}>
+        <div ref={loaderRef} className="flex justify-center py-4">
           {isFetchingNextPage ? (
-            <div className="loading-overlay">
-              <CircularProgress color="primary" size={60} />
+            <div className="flex justify-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-accent-2)]"></div>
             </div>
           ) : (
-            <Typography variant="body2" color="textSecondary">
+            <p className="text-sm text-gray-500">
               {t("Прокрутите вниз для загрузки")}
-            </Typography>
+            </p>
           )}
-        </Box>
+        </div>
       )}
     </>
   );

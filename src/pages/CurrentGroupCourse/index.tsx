@@ -2,8 +2,6 @@ import { useEffect, useState, useCallback, FC, useRef } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { CircularProgress, List } from "@mui/material";
-
 import { AppDispatch, RootState } from "@/app/store";
 import {
   clearStudyMaterialPagination,
@@ -379,9 +377,9 @@ const CurrentGroupCoursePage: FC = () => {
           <div />
           <div className="group-course-wrapper">
             {isLoadingCourse ? (
-              <center>
-                <CircularProgress color="primary" />
-              </center>
+              <div className="flex justify-center p-4">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-accent-2)]"></div>
+              </div>
             ) : (
               <h1 className="group-course-header-wrapper">
                 {currentGroupCourse.course.name}
@@ -392,7 +390,7 @@ const CurrentGroupCoursePage: FC = () => {
               <div className="assignments-list" ref={assignmentsListRef}>
                 <Card className="accent-border">
                   {scheduledLessons ? (
-                    <List>
+                    <div className="flex flex-col divide-y divide-gray-100">
                       {scheduledLessons.items.map((lesson) => (
                         <LessonItem
                           key={lesson.id}
@@ -405,11 +403,11 @@ const CurrentGroupCoursePage: FC = () => {
                           pointType={currentGroup?.pointType}
                         />
                       ))}
-                    </List>
+                    </div>
                   ) : (
-                    <center>
-                      <CircularProgress color="primary" />
-                    </center>
+                    <div className="flex justify-center p-4">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-accent-2)]"></div>
+                    </div>
                   )}
                 </Card>
               </div>
@@ -439,8 +437,8 @@ const CurrentGroupCoursePage: FC = () => {
                 ) : (
                   <>
                     {isLoadingMaterials && (
-                      <div className="centered-loadng">
-                        <CircularProgress color="primary" />
+                      <div className="centered-loadng flex justify-center p-4">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-accent-2)]"></div>
                       </div>
                     )}
                   </>

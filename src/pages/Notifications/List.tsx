@@ -1,6 +1,5 @@
 import { Notification } from "@/entities/Notification";
 import { UUID } from "@/entities/Common";
-import { Box } from "@mui/material";
 import { NotificationDisplay } from "./Display";
 
 interface NotificationsListProps {
@@ -17,7 +16,7 @@ export const NotificationsList: React.FC<NotificationsListProps> = ({
   onClick,
 }) => {
   return (
-    <Box>
+    <div className="flex flex-col gap-1">
       {notifications.map((notification) => (
         <NotificationDisplay
           key={notification.id}
@@ -29,6 +28,6 @@ export const NotificationsList: React.FC<NotificationsListProps> = ({
           }
         />
       ))}
-    </Box>
+    </div>
   );
 };

@@ -1,11 +1,5 @@
 import { FC } from "react";
-
-import { Avatar, ListItem, ListItemIcon, ListItemText } from "@mui/material";
-
-import HomeWorkIcon from "@mui/icons-material/HomeWork";
-import ClassIcon from "@mui/icons-material/Class";
-import NoteAltIcon from "@mui/icons-material/NoteAlt";
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import { Home, BookOpen, FileText, Bookmark } from "lucide-react";
 
 import { AssignmentSubmissionStatus } from "@/entities/AssignmentSubmission";
 import {
@@ -43,21 +37,18 @@ export const AssignmentItem: FC<{
 
   const getAssignmentIcon = (item: ScheduledAssignment) => {
     const iconProps = {
-      sx: {
-        fontSize: 22,
-        color: "var(--color-background)",
-      },
+      className: "w-4 h-4 text-[var(--color-background)]",
     };
 
     switch (item.assignmentSnapshot.type) {
       case AssignmentType.HOMEWORK:
-        return <HomeWorkIcon {...iconProps} />;
+        return <Home {...iconProps} />;
       case AssignmentType.CLASSWORK:
-        return <ClassIcon {...iconProps} />;
+        return <BookOpen {...iconProps} />;
       case AssignmentType.TEST:
-        return <NoteAltIcon {...iconProps} />;
+        return <FileText {...iconProps} />;
       default:
-        return <BookmarkBorderIcon {...iconProps} />;
+        return <Bookmark {...iconProps} />;
     }
   };
 
@@ -71,50 +62,41 @@ export const AssignmentItem: FC<{
   const coin = pointTypeToVisual(pointType);
 
   return (
-    <ListItem
+    <div
       onClick={() => onSelectAssignment(scheduledAssignment)}
-      className="lessons-list-item"
-      style={{
-        padding: "6px 0px",
-        cursor: "pointer",
-        backgroundColor: isActive ? "#e9e9e9" : "",
-      }}
+      className={`lessons-list-item flex items-center py-1.5 px-3 rounded-lg cursor-pointer transition-colors ${
+        isActive ? "bg-[#e9e9e9]" : ""
+      }`}
     >
-      <ListItemIcon style={{ minWidth: "15px", marginRight: "10px" }}>
-        <Avatar
-          sx={{
-            width: 28,
-            height: 28,
-            bgcolor: getScheduledAssignmentColor(scheduledAssignment),
-            "&:hover": {
-              bgcolor: getScheduledAssignmentColor(scheduledAssignment),
-            },
-          }}
+      <div className="mr-2.5 flex-shrink-0">
+        <div
+          className="w-7 h-7 rounded-full flex items-center justify-center"
+          style={{ backgroundColor: getScheduledAssignmentColor(scheduledAssignment) }}
         >
           {getAssignmentIcon(scheduledAssignment)}
-        </Avatar>
-      </ListItemIcon>
-      <ListItemText
-        primary={scheduledAssignment.assignmentSnapshot.name}
-        style={{ margin: 0 }}
-      />
-      <CoinIcon
-        pointType={coin}
-        size={14}
-        filter={isEvaluated ? "none" : "grayscale(1)"}
-      />
-      <span
-        style={{
-          fontSize: 12,
-          paddingLeft: 6,
-          color: textColor,
-        }}
-      >{`${
-        scheduledAssignment.studentAssignmentSubmission?.status !==
-        AssignmentSubmissionStatus.EVALUATED
-          ? scheduledAssignment.assignmentSnapshot.maxPoints
-          : scheduledAssignment.studentAssignmentSubmission?.points || 0
-      } ${coin.name}`}</span>
-    </ListItem>
+        </div>
+      </div>
+      <div className="flex-grow text-sm font-medium mr-2 overflow-hidden text-ellipsis whitespace-nowrap">
+        {scheduledAssignment.assignmentSnapshot.name}
+      </div>
+      <div className="flex items-center flex-shrink-0">
+        <CoinIcon
+          pointType={coin}
+          size={14}
+          filter={isEvaluated ? "none" : "grayscale(1)"}
+        />
+        <span
+          className="text-xs pl-1.5"
+          style={{ color: textColor }}
+        >
+          {`${
+            scheduledAssignment.studentAssignmentSubmission?.status !==
+            AssignmentSubmissionStatus.EVALUATED
+              ? scheduledAssignment.assignmentSnapshot.maxPoints
+              : scheduledAssignment.studentAssignmentSubmission?.points || 0
+          } ${coin.name}`}
+        </span>
+      </div>
+    </div>
   );
 };

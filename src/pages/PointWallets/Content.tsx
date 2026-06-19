@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { Box, CircularProgress, Typography } from "@mui/material";
 import { PointWallet } from "@/entities/PointWallet";
 import { PointWalletsList } from "./List";
 import { useTranslation } from "react-i18next";
@@ -23,17 +22,17 @@ export const PointWalletsContent: FC<PointWalletsContentProps> = ({
       <PointWalletsList pointWallets={pointWallets} onClick={onClick} />
 
       {hasNextPage && (
-        <Box display="flex" justifyContent="center" py={2}>
+        <div className="flex justify-center py-4">
           {isFetchingNextPage ? (
-            <div className="loading-overlay">
-              <CircularProgress color="primary" size={60} />
+            <div className="flex justify-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-accent-2)]"></div>
             </div>
           ) : (
-            <Typography variant="body2" color="textSecondary">
+            <p className="text-sm text-gray-500">
               {t("Прокрутите вниз для загрузки")}
-            </Typography>
+            </p>
           )}
-        </Box>
+        </div>
       )}
     </>
   );

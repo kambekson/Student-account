@@ -1,5 +1,4 @@
 import { PointWallet } from "@/entities/PointWallet";
-import { Box } from "@mui/material";
 import { PointWalletDisplay } from "./Display";
 
 interface PointWalletsListProps {
@@ -12,7 +11,7 @@ export const PointWalletsList: React.FC<PointWalletsListProps> = ({
   onClick,
 }) => {
   return (
-    <Box>
+    <div className="flex flex-col gap-1">
       {pointWallets.map((pointWallet) => (
         <PointWalletDisplay
           key={pointWallet.id}
@@ -22,6 +21,6 @@ export const PointWalletsList: React.FC<PointWalletsListProps> = ({
           }
         />
       ))}
-    </Box>
+    </div>
   );
 };

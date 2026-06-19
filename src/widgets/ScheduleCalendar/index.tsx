@@ -1,8 +1,7 @@
 import { format, isSameDay } from "date-fns";
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import { ChevronLeft, ChevronRight } from "@mui/icons-material";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
@@ -10,7 +9,6 @@ import { ru } from "react-day-picker/locale";
 
 import { StudentSchedule } from "@/entities/ScheduledLesson";
 import { useCalendar, useScheduleData } from "./hooks";
-import styled from "@emotion/styled";
 import CurrentDayMarker from "@/shared/assets/icons/current-date-overlay.svg?react";
 import { useIsPortrait } from "@/shared/lib/hooks/isPortrait";
 import { useTranslation } from "react-i18next";
@@ -23,12 +21,10 @@ interface ScheduleCalendarProps {
 
 const ScheduleCalendar: FC<ScheduleCalendarProps> = ({
   schedules,
-  onDateChange: onDateChange,
+  onDateChange,
 }) => {
   const isPortrait = useIsPortrait();
-
   const navigate = useNavigate();
-
   const { t } = useTranslation();
 
   const DAYS_OF_WEEK = [
@@ -63,12 +59,11 @@ const ScheduleCalendar: FC<ScheduleCalendarProps> = ({
 
   const handleSelectDate = (date: Date | undefined) => {
     if (date !== undefined) {
-      setSchedulesForDay(getSchedulesForDay(date!));
+      setSchedulesForDay(getSchedulesForDay(date));
     } else {
       setSchedulesForDay([]);
     }
-
-    return setSelected(date);
+    setSelected(date);
   };
 
   return (
@@ -95,263 +90,135 @@ const ScheduleCalendar: FC<ScheduleCalendarProps> = ({
             }}
           />
 
-          <div className="schedules-list">
-            {schedulesForDay.map((schedule) => (
-              <LessonItem
-                key={schedule.scheduledLesson.id}
-                isPast={schedule.scheduledLesson.startAt < new Date()}
-                isActive={schedule.scheduledLesson.isActive}
-                onClick={() => {
-                  if (!schedule.scheduledLesson.isActive) return;
-                  navigate(
-                    `/group-courses/${schedule.scheduledLesson.groupCourseId}`,
-                    {
-                      state: {
-                        lessonId: schedule.scheduledLesson.id,
-                      },
-                    }
-                  );
-                }}
-              >
-                {schedule.scheduledLesson.lessonSnapshot.name}
-                <br />
-                {schedule.course.name}
-                <br />
-                {format(schedule.scheduledLesson.startAt, "HH:mm")}
-              </LessonItem>
-            ))}
+          <div className="schedules-list flex flex-col gap-2 mt-4">
+            {schedulesForDay.map((schedule) => {
+              const isPast = schedule.scheduledLesson.startAt < new Date();
+              const isActive = schedule.scheduledLesson.isActive;
+              return (
+                <div
+                  key={schedule.scheduledLesson.id}
+                  onClick={() => {
+                    if (!isActive) return;
+                    navigate(
+                      `/group-courses/${schedule.scheduledLesson.groupCourseId}`,
+                      {
+                        state: {
+                          lessonId: schedule.scheduledLesson.id,
+                        },
+                      }
+                    );
+                  }}
+                  className={`rounded-[10px] p-4 text-[16px] font-normal leading-[19px] text-center relative overflow-hidden transition-all duration-300 ${
+                    isPast ? "bg-[#b9ffb8]" : "bg-[#fce99a]"
+                  } ${isActive ? "hover:-translate-y-[3px] hover:brightness-[1.05] cursor-pointer" : ""}`}
+                >
+                  {schedule.scheduledLesson.lessonSnapshot.name}
+                  <br />
+                  {schedule.course.name}
+                  <br />
+                  {format(schedule.scheduledLesson.startAt, "HH:mm")}
+                </div>
+              );
+            })}
           </div>
         </>
       ) : (
-        <CalendarContainer>
-          <CalendarNavigation>
-            <NavigationButton
+        <div className="rounded-xl border border-black overflow-hidden font-sans relative">
+          <div className="flex justify-between items-center p-4 border-b border-[#d9d9d9]">
+            <button
               onClick={goToPreviousMonth}
               aria-label="Previous month"
+              className="bg-transparent border-none rounded-full w-10 h-10 flex items-center justify-center cursor-pointer transition-colors duration-200 hover:bg-black/5 active:bg-black/10 focus:outline-none focus:ring-2 focus:ring-black/10"
             >
-              <ChevronLeft
-                sx={{ color: "var(--color-accent)", width: 24, height: 24 }}
-              />
-            </NavigationButton>
+              <ChevronLeft className="text-[var(--color-accent)] w-6 h-6" />
+            </button>
 
-            <MonthYearDisplay>{formatMonthYear(currentDate)}</MonthYearDisplay>
+            <h2 className="m-0 text-xl font-medium capitalize">
+              {formatMonthYear(currentDate)}
+            </h2>
 
-            <NavigationButton onClick={goToNextMonth} aria-label="Next month">
-              <ChevronRight
-                sx={{ color: "var(--color-accent)", width: 24, height: 24 }}
-              />
-            </NavigationButton>
-          </CalendarNavigation>
+            <button
+              onClick={goToNextMonth}
+              aria-label="Next month"
+              className="bg-transparent border-none rounded-full w-10 h-10 flex items-center justify-center cursor-pointer transition-colors duration-200 hover:bg-black/5 active:bg-black/10 focus:outline-none focus:ring-2 focus:ring-black/10"
+            >
+              <ChevronRight className="text-[var(--color-accent)] w-6 h-6" />
+            </button>
+          </div>
 
-          <CalendarHeader>
+          <div className="grid grid-cols-7 border-b border-[#d9d9d9]">
             {DAYS_OF_WEEK.map((day) => (
-              <DayHeader key={day}>{day}</DayHeader>
+              <div
+                key={day}
+                className="p-3 text-center text-2xl font-normal leading-[29px] text-[#555555] border-r border-[#d9d9d9] last:border-r-0 relative"
+              >
+                {day}
+              </div>
             ))}
-          </CalendarHeader>
+          </div>
 
-          <CalendarGrid>
+          <div className="grid grid-cols-7">
             {calendarDays.map((day, index) => {
               const daySchedules = getSchedulesForDay(day.date);
               const isTodayDate = isSameDay(day.date, new Date());
 
               return (
-                <CalendarDay key={index} isCurrentMonth={day.isCurrentMonth}>
-                  <DayNumber>
+                <div
+                  key={index}
+                  className={`min-h-[100px] p-2 border-r border-b border-[#d9d9d9] [&:nth-child(7n)]:border-r-0 ${
+                    day.isCurrentMonth ? "opacity-100" : "opacity-50"
+                  }`}
+                >
+                  <div className="text-[16px] font-medium leading-[19px] mb-1.5 w-6 h-6 flex items-center justify-center relative">
                     {day.date.getDate()}
-                    {isTodayDate && <StyledCurrentDayMarker />}
-                  </DayNumber>
-
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "5px",
-                    }}
-                  >
-                    {daySchedules.map((schedule) => (
-                      <LessonItem
-                        key={schedule.scheduledLesson.id}
-                        isPast={schedule.scheduledLesson.startAt < new Date()}
-                        isActive={schedule.scheduledLesson.isActive}
-                        onClick={() => {
-                          if (!schedule.scheduledLesson.isActive) return;
-                          navigate(
-                            `/group-courses/${schedule.scheduledLesson.groupCourseId}`,
-                            {
-                              state: {
-                                lessonId: schedule.scheduledLesson.id,
-                              },
-                            }
-                          );
-                        }}
-                      >
-                        {format(schedule.scheduledLesson.startAt, "HH:mm")}
-                        <div className="details">
-                          <div>
-                            {schedule.scheduledLesson.lessonSnapshot.name}
-                          </div>
-                          <div>{schedule.course.name}</div>
-                        </div>
-                      </LessonItem>
-                    ))}
+                    {isTodayDate && (
+                      <div className="absolute w-10 h-[47px] translate-x-[2px] -translate-y-[2px] z-[1]">
+                        <CurrentDayMarker />
+                      </div>
+                    )}
                   </div>
-                </CalendarDay>
+
+                  <div className="flex flex-col gap-[5px]">
+                    {daySchedules.map((schedule) => {
+                      const isPast = schedule.scheduledLesson.startAt < new Date();
+                      const isActive = schedule.scheduledLesson.isActive;
+                      return (
+                        <div
+                          key={schedule.scheduledLesson.id}
+                          onClick={() => {
+                            if (!isActive) return;
+                            navigate(
+                              `/group-courses/${schedule.scheduledLesson.groupCourseId}`,
+                              {
+                                state: {
+                                  lessonId: schedule.scheduledLesson.id,
+                                },
+                              }
+                            );
+                          }}
+                          className={`rounded-[10px] p-4 text-[16px] font-normal leading-[19px] text-center relative overflow-hidden transition-all duration-300 group ${
+                            isPast ? "bg-[#b9ffb8]" : "bg-[#fce99a]"
+                          } ${isActive ? "hover:-translate-y-[3px] hover:brightness-[1.05] cursor-pointer" : ""}`}
+                        >
+                          {format(schedule.scheduledLesson.startAt, "HH:mm")}
+                          <div className="opacity-0 max-h-0 overflow-hidden transition-all duration-300 group-hover:opacity-100 group-hover:max-h-[100px] group-hover:mt-2 text-xs">
+                            <div>
+                              {schedule.scheduledLesson.lessonSnapshot.name}
+                            </div>
+                            <div className="font-semibold">{schedule.course.name}</div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               );
             })}
-          </CalendarGrid>
-        </CalendarContainer>
+          </div>
+        </div>
       )}
     </>
   );
 };
-
-const CalendarContainer = styled.div`
-  border-radius: 12px;
-  border: 1px solid black;
-  overflow: hidden;
-  font-family: Inter;
-  position: relative;
-`;
-
-const CalendarNavigation = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px;
-  border-bottom: 1px solid #d9d9d9;
-`;
-
-const MonthYearDisplay = styled.h2`
-  margin: 0;
-  font-size: 20px;
-  font-weight: 500;
-  text-transform: capitalize;
-`;
-
-const NavigationButton = styled.button`
-  background: none;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-  }
-
-  &:active {
-    background-color: rgba(0, 0, 0, 0.1);
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
-  }
-`;
-
-const CalendarHeader = styled.div`
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  border-bottom: 1px solid #d9d9d9;
-`;
-
-const DayHeader = styled.div`
-  padding: 12px;
-  text-align: center;
-  font-size: 24px;
-  font-weight: 400;
-  line-height: 29px;
-  color: #555555;
-  border-right: 1px solid #d9d9d9;
-  position: relative;
-
-  &:last-child {
-    border-right: none;
-  }
-`;
-
-const CalendarGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-`;
-
-const CalendarDay = styled.div<{ isCurrentMonth: boolean }>`
-  min-height: 100px;
-  padding: 8px;
-  border-right: 1px solid #d9d9d9;
-  border-bottom: 1px solid #d9d9d9;
-  opacity: ${(props) => (props.isCurrentMonth ? 1 : 0.5)};
-
-  &:nth-child(7n) {
-    border-right: none;
-  }
-`;
-
-const DayNumber = styled.div`
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 19px;
-  margin-bottom: 6px;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-`;
-
-const CurrentDayMarkerWrapper = (props: any) => {
-  const SVGComponent = CurrentDayMarker as any;
-  return <SVGComponent {...props} />;
-};
-
-const StyledCurrentDayMarker = styled(CurrentDayMarkerWrapper)`
-  position: absolute;
-  width: 40px;
-  height: 47px;
-  transform: translate(2px, -2px);
-  z-index: 1;
-`;
-
-const LessonItem = styled.div<{ isPast: boolean; isActive: boolean }>`
-  background-color: ${(props) => (props.isPast ? "#b9ffb8" : "#fce99a")};
-  border-radius: 10px;
-  padding: 16px;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 19px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
-
-  .details {
-    opacity: 0;
-    max-height: 0;
-    overflow: hidden;
-    transition: opacity 0.3s ease, max-height 0.3s ease;
-  }
-
-  &:hover .details {
-    opacity: 1;
-    max-height: 100px;
-    margin-top: 8px;
-  }
-
-  ${(props) =>
-    props.isActive &&
-    `
-    &:hover {
-      transform: translateY(-3px);
-      filter: brightness(1.05);
-      cursor: pointer;
-    }
-  `}
-`;
 
 export default ScheduleCalendar;

@@ -1,6 +1,6 @@
 import { pointTypeToVisual } from "@/entities/Common";
 import { CoinIcon } from "@/shared/ui/Icons/Coin";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { Info } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 interface CoinBalanceProps {
@@ -20,46 +20,22 @@ export const CoinBalance: React.FC<CoinBalanceProps> = ({
   const { t } = useTranslation();
 
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
+    <div className="flex items-center justify-center">
       <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          cursor: isClickable ? "pointer" : "default",
-          gap: "10px",
-        }}
+        className={`flex items-center gap-2.5 ${isClickable ? "cursor-pointer" : "cursor-default"}`}
         onClick={onBalanceClick}
       >
-        <InfoOutlinedIcon
-          sx={{
-            fontSize: "20px",
-            color: "var(--color-text-2)",
-          }}
-        />
+        <Info className="w-5 h-5 text-[var(--color-text-2)]" />
 
         <CoinIcon pointType={coin} size={24} />
 
-        <span
-          style={{
-            fontSize: "16px",
-            fontWeight: 500,
-            lineHeight: "19px",
-            paddingLeft: "5px",
-            color: "var(--color-text)",
-          }}
-        >
+        <span className="text-base font-medium leading-[19px] pl-1 text-[var(--color-text)]">
           {`${totalPoints} ${coin.name}`}
         </span>
       </div>
 
       {showShopButton && (
-        <button style={{ marginLeft: "30px" }} className="primary-button">
+        <button className="primary-button ml-[30px]">
           <span>{t("Магазин")}</span>
         </button>
       )}
