@@ -1,10 +1,31 @@
 import React from "react";
 
+type TabType = "dashboard" | "students" | "groups" | "parents" | "schedule" | "payments" | "teachers";
+
 interface SidebarProps {
-  activeTab: "dashboard" | "students" | "groups" | "parents" | "schedule" | "payments" | "teachers";
-  onChangeTab: (tab: "dashboard" | "students" | "groups" | "parents" | "schedule" | "payments" | "teachers") => void;
+  activeTab: TabType;
+  onChangeTab: (tab: TabType) => void;
   onShowToast: (message: string) => void;
 }
+
+interface NavItem {
+  id?: TabType;
+  label: string;
+  icon: string;
+}
+
+const NAV_ITEMS: NavItem[] = [
+  { id: "dashboard", label: "Панель управления", icon: "dashboard" },
+  { id: "students", label: "Ученики", icon: "group" },
+  { id: "parents", label: "Родители", icon: "family_restroom" },
+  { id: "groups", label: "Группы", icon: "diversity_3" },
+  { id: "schedule", label: "Расписание", icon: "calendar_month" },
+  { label: "Посещаемость", icon: "how_to_reg" },
+  { id: "payments", label: "Платежи", icon: "payments" },
+  { label: "Подписки", icon: "card_membership" },
+  { id: "teachers", label: "Преподаватели", icon: "school" },
+  { label: "Отчеты", icon: "analytics" },
+];
 
 export const Sidebar: React.FC<SidebarProps> = ({
   activeTab,
@@ -12,10 +33,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onShowToast,
 }) => {
   return (
-    <aside className="fixed left-0 top-0 h-screen w-[260px] bg-surface border-r border-outline-variant flex flex-col gap-sm p-4 z-40">
+    <aside
+      aria-label="Боковая панель навигации"
+      className="fixed left-0 top-0 h-screen w-[260px] bg-surface border-r border-outline-variant flex flex-col gap-sm p-4 z-40"
+    >
       <div className="mb-stack-gap-lg px-2 mt-2">
         <h1 className="font-display text-[22px] font-bold text-primary flex items-center gap-2">
-          <span className="material-symbols-outlined text-primary text-[28px]">school</span>
+          <span className="material-symbols-outlined text-primary text-[28px]" aria-hidden="true">
+            school
+          </span>
           EduCenter Pro
         </h1>
         <p className="font-body-sm text-[11px] text-on-surface-variant uppercase tracking-wider font-semibold">
@@ -23,107 +49,34 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </p>
       </div>
 
-      <nav className="flex-1 flex flex-col gap-1 overflow-y-auto sidebar-scroll">
-        <button
-          onClick={() => onChangeTab("dashboard")}
-          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg font-body-md text-body-md transition-all text-left ${
-            activeTab === "dashboard"
-              ? "bg-primary-container text-on-primary-container font-semibold"
-              : "text-on-surface-variant hover:bg-surface-container-high"
-          }`}
-        >
-          <span className="material-symbols-outlined">dashboard</span>
-          <span>Панель управления</span>
-        </button>
-
-        <button
-          onClick={() => onChangeTab("students")}
-          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg font-body-md text-body-md transition-all text-left ${
-            activeTab === "students"
-              ? "bg-primary-container text-on-primary-container font-semibold"
-              : "text-on-surface-variant hover:bg-surface-container-high"
-          }`}
-        >
-          <span className="material-symbols-outlined">group</span>
-          <span>Ученики</span>
-        </button>
-
-        <button
-          onClick={() => onChangeTab("parents")}
-          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg font-body-md text-body-md transition-all text-left ${
-            activeTab === "parents"
-              ? "bg-primary-container text-on-primary-container font-semibold"
-              : "text-on-surface-variant hover:bg-surface-container-high"
-          }`}
-        >
-          <span className="material-symbols-outlined">family_restroom</span>
-          <span>Родители</span>
-        </button>
-        <button
-          onClick={() => onChangeTab("groups")}
-          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg font-body-md text-body-md transition-all text-left ${
-            activeTab === "groups"
-              ? "bg-primary-container text-on-primary-container font-semibold"
-              : "text-on-surface-variant hover:bg-surface-container-high"
-          }`}
-        >
-          <span className="material-symbols-outlined">diversity_3</span>
-          <span>Группы</span>
-        </button>
-        <button
-          onClick={() => onChangeTab("schedule")}
-          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg font-body-md text-body-md transition-all text-left ${
-            activeTab === "schedule"
-              ? "bg-primary-container text-on-primary-container font-semibold"
-              : "text-on-surface-variant hover:bg-surface-container-high"
-          }`}
-        >
-          <span className="material-symbols-outlined">calendar_month</span>
-          <span>Расписание</span>
-        </button>
-        <button
-          onClick={() => onShowToast("Раздел находится в разработке")}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors font-body-md text-body-md text-left"
-        >
-          <span className="material-symbols-outlined">how_to_reg</span>
-          <span>Посещаемость</span>
-        </button>
-        <button
-          onClick={() => onChangeTab("payments")}
-          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg font-body-md text-body-md transition-all text-left ${
-            activeTab === "payments"
-              ? "bg-primary-container text-on-primary-container font-semibold"
-              : "text-on-surface-variant hover:bg-surface-container-high"
-          }`}
-        >
-          <span className="material-symbols-outlined">payments</span>
-          <span>Платежи</span>
-        </button>
-        <button
-          onClick={() => onShowToast("Раздел находится в разработке")}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors font-body-md text-body-md text-left"
-        >
-          <span className="material-symbols-outlined">card_membership</span>
-          <span>Подписки</span>
-        </button>
-        <button
-          onClick={() => onChangeTab("teachers")}
-          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg font-body-md text-body-md transition-all text-left ${
-            activeTab === "teachers"
-              ? "bg-primary-container text-on-primary-container font-semibold"
-              : "text-on-surface-variant hover:bg-surface-container-high"
-          }`}
-        >
-          <span className="material-symbols-outlined">school</span>
-          <span>Преподаватели</span>
-        </button>
-        <button
-          onClick={() => onShowToast("Раздел находится в разработке")}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors font-body-md text-body-md text-left"
-        >
-          <span className="material-symbols-outlined">analytics</span>
-          <span>Отчеты</span>
-        </button>
+      <nav aria-label="Основная навигация" className="flex-1 flex flex-col gap-1 overflow-y-auto sidebar-scroll">
+        {NAV_ITEMS.map((item) => {
+          const isActive = item.id ? activeTab === item.id : false;
+          return (
+            <button
+              key={item.label}
+              type="button"
+              aria-current={isActive ? "page" : undefined}
+              onClick={() => {
+                if (item.id) {
+                  onChangeTab(item.id);
+                } else {
+                  onShowToast("Раздел находится в разработке");
+                }
+              }}
+              className={`flex items-center gap-3 px-3 py-2.5 min-h-[44px] rounded-lg font-body-md text-body-md text-left transition-all duration-150 ease-out active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 motion-reduce:transition-none ${
+                isActive
+                  ? "bg-primary-container text-on-primary-container font-semibold"
+                  : "text-on-surface-variant hover:bg-surface-container-high"
+              }`}
+            >
+              <span className="material-symbols-outlined" aria-hidden="true">
+                {item.icon}
+              </span>
+              <span>{item.label}</span>
+            </button>
+          );
+        })}
       </nav>
 
       <div className="mt-auto pt-4 border-t border-outline-variant">
